@@ -1,0 +1,7 @@
+[
+{
+  "directory": "D:/Data/OneDrive/projects/mytinyraytracer/build",
+  "command": "D:\\Applications\\Compilers\\mingw64\\bin\\g++.exe   -g -Wall -Wextra -Weffc++ -pedantic -std=c++11 -o CMakeFiles\\mytinyraytracer.dir\\main.cpp.obj -c D:\\Data\\OneDrive\\projects\\mytinyraytracer\\main.cpp",
+  "file": "D:/Data/OneDrive/projects/mytinyraytracer/main.cpp"
+}
+]

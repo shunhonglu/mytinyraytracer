@@ -1,0 +1,3 @@
+"D:\Applications\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E rm -f CMakeFiles\mytinyraytracer.dir/objects.a
+D:\Applications\Compilers\mingw64\bin\ar.exe qc CMakeFiles\mytinyraytracer.dir/objects.a @CMakeFiles\mytinyraytracer.dir\objects1
+D:\Applications\Compilers\mingw64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\mytinyraytracer.dir/objects.a -Wl,--no-whole-archive -o mytinyraytracer.exe -Wl,--out-implib,libmytinyraytracer.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\mytinyraytracer.dir\linkLibs.rsp
