@@ -13,9 +13,10 @@
 #include "./ui_mainwindow.h"
 #include "Render.h"
 #include "utils.h"
+#include "RenderPara.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
-    std::thread t1([&] { r.render(samples_per_pixel, raytraer_depth, background); });
+    std::thread t1([&] { r.render(render_para.samples_per_pixel, render_para.raytraer_depth, render_para.background); });
 
     ui->setupUi(this);
 
@@ -29,7 +30,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     create_timer();
 
-    this->resize(r.get_screen().get_width(), r.get_screen().get_height() + status->height());
+    this->setWindowTitle("mytinyraytracer");
+
+    this->setFixedSize(r.get_screen().get_width(), r.get_screen().get_height() + status->height());
 
     pool.push_back(std::move(t1));
 }

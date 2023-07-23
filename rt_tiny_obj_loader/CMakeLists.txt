@@ -1,0 +1,1 @@
+add_library(rt_tiny_obj_loader_lib STATIC rt_tiny_obj_loader.cpp)

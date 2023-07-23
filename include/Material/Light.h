@@ -13,7 +13,9 @@ public:
                          Ray& scattered) const override {
         return false;
     };
-    virtual Color3d emitted(double u, double v, Vector3d point) const override { return _emit_texture->value(u, v, point); }
+    virtual Color3d emitted(double u, double v, Vector3d point) const override {
+        return _emit_texture->value(u, v, point);
+    }
 
 private:
     std::shared_ptr<Texture> _emit_texture;

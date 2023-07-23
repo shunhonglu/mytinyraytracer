@@ -7,23 +7,26 @@ void BVH_Node::generate_BVH(std::vector<std::shared_ptr<Hittable>>& objects, siz
     if (end - start <= 3) {
         left = right = std::make_shared<Hittable_list>(std::vector<std::shared_ptr<Hittable>>(objects.begin() + start, objects.begin() + end));
         if(!left->bounding_box(time0, time1, left_bounding_box) || !right->bounding_box(time0, time1, right_bounding_box)) {
-            std::cout << "Can't construct BVH\n";
+            std::cout << "Can't construct bounding box\n";
         }
         _bounding_box = AABB::surround_bounding_box(left_bounding_box, right_bounding_box);
         return;
     }
 
-    int axis = choose_axis(std::vector<std::shared_ptr<Hittable>>(objects.begin() + start, objects.begin() + end));
+    Axis axis = choose_axis(std::vector<std::shared_ptr<Hittable>>(objects.begin() + start, objects.begin() + end));
 
     std::sort(objects.begin() + start, objects.begin() + end, [&](const std::shared_ptr<Hittable>& left, const std::shared_ptr<Hittable>& right) {
-        return (left->origin())[axis] < (right->origin())[axis];
+        AABB left_aabb, right_aabb;
+        left->bounding_box(0, infinity, left_aabb);
+        right->bounding_box(0, infinity, right_aabb);
+        return left_aabb.center()[axis] < right_aabb.center()[axis];
     });
 
     size_t middle = (start + end) / 2;
     left = std::make_shared<BVH_Node>(objects, start, middle, time0, time1);
     right = std::make_shared<BVH_Node>(objects, middle, end, time0, time1);
     if(!left->bounding_box(time0, time1, left_bounding_box) || !right->bounding_box(time0, time1, right_bounding_box)) {
-        std::cout << "Error\n";
+        std::cout << "Can't construct bounding box\n";
     }
     _bounding_box = AABB::surround_bounding_box(left_bounding_box, right_bounding_box);
 }

@@ -25,9 +25,6 @@ public:
 
     virtual bool hit(const Ray& r, double t_min, double t_max, Hit_record& rec) const override;
     virtual bool bounding_box(double time0, double time1, AABB& bounding_box) const override;
-    virtual Vector3d origin() const override {
-        return center;
-    }
 
 private:
     Vector3d center;
@@ -45,9 +42,6 @@ public:
 
     virtual bool hit(const Ray& r, double t_min, double t_max, Hit_record& rec) const override;
     virtual bool bounding_box(double time0, double time1, AABB& bounding_box) const override;
-    virtual Vector3d origin() const override {
-        return (center0 + center1) / 2;
-    }
 
 private:
     Vector3d center0, center1;

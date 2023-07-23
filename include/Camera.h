@@ -6,6 +6,7 @@
 
 class Camera {
 public:
+    Camera() = default;
     Camera(Vector3d lookfrom, Vector3d lookat, Vector3d vup, double vfov, double aspect_ratio, double aperture,
            double focus_dist, double time0, double time1) {
         w = (lookfrom - lookat).normalized();
@@ -29,7 +30,8 @@ public:
 
     Ray get_ray(double u, double v) {
         Vector3d offset = lens_radius * random_in_unit_disk();
-        return Ray{origin + offset, lower_left_corner + u * horizontal + v * vertical - origin - offset, random_double(t0, t1)};
+        return Ray{origin + offset, lower_left_corner + u * horizontal + v * vertical - origin - offset,
+                   random_double(t0, t1)};
     }
 
 private:

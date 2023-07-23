@@ -9,9 +9,7 @@
 class Material {
 public:
     virtual bool scatter(const Ray& ray_in, const Hit_record& rec, Color3d& attenuation, Ray& scattered) const = 0;
-    virtual Color3d emitted(double u, double v, Vector3d point) const {
-        return Color3d{0.0, 0.0, 0.0};
-    }
+    virtual Color3d emitted(double u, double v, Vector3d point) const { return Color3d{0.0, 0.0, 0.0}; }
 };
 
 class Lambertian : public Material {

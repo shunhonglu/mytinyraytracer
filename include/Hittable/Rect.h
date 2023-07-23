@@ -36,7 +36,6 @@ public:
         bounding_box = AABB{Vector3d{_x0, _y0, _z - 0.001}, Vector3d{_x1, _y1, _z + 0.001}};
         return true;
     }
-    virtual Vector3d origin() const { return Vector3d{(_x0 + _x1) / 2, (_y0 + _y1) / 2, _z}; }
 
 private:
     double _x0{0.0}, _x1{0.0}, _y0{0.0}, _y1{0.0}, _z{0.0};
@@ -76,7 +75,6 @@ public:
         bounding_box = AABB{Vector3d{_x0, _y - 0.001, _z0}, Vector3d{_x1, _y + 0.001, _z1}};
         return true;
     }
-    virtual Vector3d origin() const { return Vector3d{(_x0 + _x1) / 2, _y, (_z0 + _z1) / 2}; }
 
 private:
     double _x0{0.0}, _x1{0.0}, _z0{0.0}, _z1{0.0}, _y{0.0};
@@ -116,7 +114,6 @@ public:
         bounding_box = AABB{Vector3d{_x - 0.001, _y0, _z0}, Vector3d{_x + 0.001, _y1, _z1}};
         return true;
     }
-    virtual Vector3d origin() const { return Vector3d{_x, (_y0 + _y1) / 2, (_z0 + _z1) / 2}; }
 
 private:
     double _y0{0.0}, _y1{0.0}, _z0{0.0}, _z1{0.0}, _x{0.0};

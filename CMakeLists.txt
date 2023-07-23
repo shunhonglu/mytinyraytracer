@@ -21,33 +21,44 @@ find_package(TBB REQUIRED)
 # add *rt_stb_image* as a library
 add_subdirectory(rt_stb_image)
 
+# add *spdlog* as a library
+add_subdirectory(spdlog)
+
+# add *tiny_obj_loader* as a library
+add_subdirectory(rt_tiny_obj_loader)
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        mymath.h
-        Ray.h
-        Hittable.h
-        Sphere.h
-        Sphere.cpp
-        Hittable_list.h
-        Hittable_list.cpp
-        Camera.h
-        utils.h
-        ThreadPool.h
-        Material.h
-        AABB.h
-        BVH_Node.h
-        BVH_Node.cpp
-        Texture.h
-        Perlin.h
-        Light.h
-        Rect.h
-        ticktock.h
-        Render.h
-        Screen.h
-        Scene.h
+        include/utils.h
+        include/mymath.h
+        include/Ray.h
+        include/Camera.h
+        include/Screen.h
+        include/Render.h
+        include/RenderPara.h
+        include/ThreadPool.h
+        include/AABB.h
+        include/ticktock.h
+        include/Hittable/Hittable.h
+        include/Hittable/Hittable_list.h
+        include/Hittable/Sphere.h
+        include/Hittable/BVH_Node.h
+        include/Hittable/Rect.h
+        include/Hittable/Triangle.h
+        include/Material/Material.h
+        include/Material/Light.h
+        include/Texture/Texture.h
+        include/Texture/Perlin.h
+        src/Sphere.cpp
+        src/Triangle.cpp
+        src/Hittable_list.cpp
+        src/BVH_Node.cpp
+        src/Render.cpp
+        src/Scene.cpp
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -73,14 +84,30 @@ else()
     endif()
 endif()
 
+target_include_directories(mytinyraytracer PUBLIC include)
+target_include_directories(mytinyraytracer PUBLIC include/Hittable)
+target_include_directories(mytinyraytracer PUBLIC include/Material)
+target_include_directories(mytinyraytracer PUBLIC include/Texture)
+
 # link *TBB*
 target_link_libraries(mytinyraytracer PUBLIC TBB::tbb)
-
-target_include_directories(mytinyraytracer PUBLIC Eigen)
 
 # link *rt_stb_image_lib*
 target_link_libraries(mytinyraytracer PUBLIC rt_stb_image_lib)
 target_include_directories(mytinyraytracer PUBLIC rt_stb_image)
+
+# link *spdlog*
+target_link_libraries(mytinyraytracer PUBLIC spdlog::spdlog)
+
+#link *rt_tiny_obj_loader_lib*
+target_link_libraries(mytinyraytracer PUBLIC rt_tiny_obj_loader_lib)
+target_include_directories(mytinyraytracer PUBLIC rt_tiny_obj_loader)
+
+# link *Eigen*
+target_include_directories(mytinyraytracer PUBLIC Eigen)
+
+# link *nlohmann*
+target_include_directories(mytinyraytracer PUBLIC nlohmann)
 
 target_link_libraries(mytinyraytracer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 

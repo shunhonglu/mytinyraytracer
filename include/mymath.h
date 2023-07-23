@@ -4,6 +4,7 @@
 #include <Dense>
 #include <random>
 
+using Vector2d = Eigen::Vector2d;
 using Vector3d = Eigen::Vector3d;
 using Matrix3d = Eigen::Matrix3d;
 
@@ -72,7 +73,7 @@ static Vector3d random_in_hemisphere(const Vector3d& normal) {
 
 static bool near_zero(Vector3d vec) {
     const auto a = 1e-8;
-    if ((vec.x() < a) && (vec.y() < a) && (vec.z() < a)) {
+    if ((std::abs(vec.x()) < a) && (std::abs(vec.y()) < a) && (std::abs(vec.z()) < a)) {
         return true;
     }
 
