@@ -1,1 +1,0 @@
-add_library(rt_stb_image_lib STATIC rt_stb_image.cpp)

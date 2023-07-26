@@ -66,6 +66,8 @@ public:
     const static int desired_channels = 3;
 
     Image_Texture() : _data(nullptr), width(0), height(0) {}
+    Image_Texture(const Image_Texture&) = delete;
+    Image_Texture(Image_Texture&&) = delete;
 
     Image_Texture(const char* filename) {
         int channels_in_file;

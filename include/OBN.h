@@ -3,6 +3,7 @@
 
 #include "mymath.h"
 
+// TODO: there seem to be some problems remaining.
 class OBN {
 public:
     OBN() {}
@@ -16,7 +17,7 @@ public:
 
     Vector3d local(Vector3d a) const { return a.x() * u() + a.y() * v() + a.z() * w(); }
 
-    // n doesn't have to be a unit vector
+    // n doesn't have to be a unit vector.
     void build_from_w(Vector3d n) {
         axis[2] = n.normalized();
         Vector3d a = (std::fabs(w().x()) > 0.9) ? Vector3d{0.0, 1.0, 0.0} : Vector3d{1.0, 0.0, 0.0};

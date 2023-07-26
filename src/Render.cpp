@@ -63,6 +63,10 @@ Color3d Render::ray_color(const Ray& r, Color3d background, const Hittable& worl
         Vector3d unit_wi_dir = (light_rec.p - rec.p).normalized();
         double distance = (light_rec.p - rec.p).norm();
         Hit_record blocked_rec;
+        /*
+         * TODO: for example: in cornell box, if we set the y coordinate of *light* the same as the *floor*,
+         * we will get this error, why?
+         */
         if (!world.hit(Ray{rec.p, unit_wi_dir, 0.0}, 0.001, infinity, blocked_rec)) {
             spdlog::error("Ray to the light sampling point hit nothing!");
             exit(1);

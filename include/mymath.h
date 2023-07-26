@@ -12,7 +12,7 @@ using Color3d = Vector3d;
 
 // Constants
 
-// *const* objects are valid within the file by default
+// *const* objects are valid within the file by default.
 const double infinity = std::numeric_limits<double>::infinity();
 const double pi = 3.1415926535897932385;
 
@@ -82,7 +82,7 @@ static bool near_zero(Vector3d vec) {
 
 static Vector3d reflect(Vector3d vec_in, Vector3d normal) { return vec_in - 2 * vec_in.dot(normal) * normal; }
 
-// Attention: *vec_in* is unit vector
+// Attention: *vec_in* is unit vector.
 static Vector3d refract(Vector3d vec_in, Vector3d normal, double eta_over_etap) {
     Vector3d vec_out_perpendicular = eta_over_etap * (vec_in - vec_in.dot(normal) * normal);
     Vector3d vec_out_parallel = -std::sqrt(1 - vec_out_perpendicular.dot(vec_out_perpendicular)) * normal;
