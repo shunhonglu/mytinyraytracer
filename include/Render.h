@@ -11,8 +11,12 @@ public:
     Render() = default;
     Render(const Screen& canvas, const Camera& cam, const Hittable_list& world)
         : _canvas(canvas), _cam(cam), _world(world) {
-        bvh = BVH_Node{_world, 0.0, infinity};
+        bvh = BVH_Node{_world};
+
+        build_lights();
     }
+
+    void build_lights();
 
     const Screen& get_screen() const { return _canvas; }
 
@@ -24,6 +28,7 @@ private:
     Screen _canvas;
     Camera _cam;
     Hittable_list _world;
+    Hittable_list _lights;
     BVH_Node bvh;
 };
 

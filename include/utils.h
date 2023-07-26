@@ -22,7 +22,7 @@ extern Render r;
 
 // Scenes
 extern std::function<Hittable_list()> get_scene_function(std::string function_name);
-extern Hittable_list obj_scene(const std::vector<std::string>& scene_obj_paths);
+extern std::function<Hittable_list(const std::vector<std::string>&)> get_obj_scene_function(std::string function_name);
 
 // Thread pool
 extern ThreadPool pool;

@@ -6,9 +6,9 @@
 
 #include "Hittable_list.h"
 #include "Light.h"
-#include "Rect.h"
 #include "Sphere.h"
 #include "Texture.h"
+#include "Triangle.h"
 
 Hittable_list random_scene() {
     Hittable_list world;
@@ -86,39 +86,30 @@ Hittable_list earth() {
     return Hittable_list(globe);
 }
 
-Hittable_list simple_light() {
+Hittable_list test_lambertian() {
     Hittable_list world;
 
-    auto perlin_texture = std::make_shared<Perlin_Texture>(4);
+    auto light_material = std::make_shared<Diffuse_light>(Color3d{3.0, 3.0, 3.0});
+    auto light_triangle =
+        std::make_shared<Triangle>(Vector3d{3.0, 10.0, 0.0}, Vector3d{0.0, 10.0, 0.0}, Vector3d{0.0, 10.0, 3.0},
+                                   Vector3d{0.0, -1.0, 0.0}, Vector3d{0.0, -1.0, 0.0}, Vector3d{0.0, -1.0, 0.0},
+                                   Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, light_material);
+    world.add(light_triangle);
 
-    world.add(std::make_shared<Sphere>(Vector3d(0, -1000, 0), 1000, std::make_shared<Lambertian>(perlin_texture)));
-    world.add(std::make_shared<Sphere>(Vector3d(0, 2, 0), 2, std::make_shared<Lambertian>(perlin_texture)));
+    auto sphere =
+        std::make_shared<Sphere>(Vector3d{1.0, 1.0, 1.0}, 1.0, std::make_shared<Lambertian>(Color3d{0.3, 0.4, 0.7}));
+    world.add(sphere);
 
-    auto light_texture = std::make_shared<Diffuse_light>(Color3d{4.0, 4.0, 4.0});
-    world.add(std::make_shared<XY_Rect>(3, 5, 1, 3, -2, light_texture));
+    auto triangle = std::make_shared<Triangle>(
+        Vector3d{10.0, 0.0, 0.0}, Vector3d{0.0, 0.0, 0.0}, Vector3d{0.0, 0.0, 10.0}, Vector3d{0.0, 1.0, 0.0},
+        Vector3d{0.0, 1.0, 0.0}, Vector3d{0.0, 1.0, 0.0}, Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0},
+        std::make_shared<Lambertian>(Color3d{0.8, 0.8, 0.8}));
+    world.add(triangle);
 
     return world;
 }
 
-Hittable_list cornell_box() {
-    Hittable_list world;
-
-    auto red = std::make_shared<Lambertian>(Color3d{.65, .05, .05});
-    auto white = std::make_shared<Lambertian>(Color3d{.73, .73, .73});
-    auto green = std::make_shared<Lambertian>(Color3d{.12, .45, .15});
-    auto light = std::make_shared<Diffuse_light>(Color3d{15, 15, 15});
-
-    world.add(std::make_shared<YZ_Rect>(0, 555, 0, 555, 555, green));
-    world.add(std::make_shared<YZ_Rect>(0, 555, 0, 555, 0, red));
-    world.add(std::make_shared<XZ_Rect>(213, 343, 227, 332, 554, light));
-    world.add(std::make_shared<XZ_Rect>(0, 555, 0, 555, 0, white));
-    world.add(std::make_shared<XZ_Rect>(0, 555, 0, 555, 555, white));
-    world.add(std::make_shared<XY_Rect>(0, 555, 0, 555, 555, white));
-
-    return world;
-}
-
-Hittable_list obj_scene(const std::vector<std::string>& scene_obj_paths) {
+Hittable_list bunny(const std::vector<std::string>& scene_obj_paths) {
     Hittable_list world;
 
     for (const auto& scene_obj_path : scene_obj_paths) {
@@ -131,9 +122,98 @@ Hittable_list obj_scene(const std::vector<std::string>& scene_obj_paths) {
     return world;
 }
 
+Hittable_list cornell_box() {
+    Hittable_list world;
+
+    // Light
+    auto light_material = std::make_shared<Diffuse_light>(Color3d{15.0, 15.0, 15.0});
+    auto light_triangle1 = std::make_shared<Triangle>(
+        Vector3d{213.0, 554.0, 227.0}, Vector3d{213.0, 554.0, 332.0}, Vector3d{343.0, 554.0, 227.0},
+        Vector3d{0.0, -1.0, 0.0}, Vector3d{0.0, -1.0, 0.0}, Vector3d{0.0, -1.0, 0.0}, Vector2d{0.0, 0.0},
+        Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, light_material);
+    auto light_triangle2 = std::make_shared<Triangle>(
+        Vector3d{343.0, 554.0, 332.0}, Vector3d{343.0, 554.0, 227.0}, Vector3d{213.0, 554.0, 332.0},
+        Vector3d{0.0, -1.0, 0.0}, Vector3d{0.0, -1.0, 0.0}, Vector3d{0.0, -1.0, 0.0}, Vector2d{0.0, 0.0},
+        Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, light_material);
+    world.add(light_triangle1);
+    world.add(light_triangle2);
+
+    // Red
+    auto red = std::make_shared<Lambertian>(Color3d{.65, .05, .05});
+    auto red_triangle1 = std::make_shared<Triangle>(
+        Vector3d{0.0, 0.0, 0.0}, Vector3d{0.0, 555.0, 0.0}, Vector3d{0.0, 0.0, 555.0},
+        Vector3d{1.0, 0.0, 0.0}, Vector3d{1.0, 0.0, 0.0}, Vector3d{1.0, 0.0, 0.0}, Vector2d{0.0, 0.0},
+        Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, red);
+    auto red_triangle2 = std::make_shared<Triangle>(
+        Vector3d{0.0, 555.0, 555.0}, Vector3d{0.0, 0.0, 555.0}, Vector3d{0.0, 555.0, 0.0},
+        Vector3d{1.0, 0.0, 0.0}, Vector3d{1.0, 0.0, 0.0}, Vector3d{1.0, 0.0, 0.0}, Vector2d{0.0, 0.0},
+        Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, red);
+    world.add(red_triangle1);
+    world.add(red_triangle2);
+
+    // Green
+    auto green = std::make_shared<Lambertian>(Color3d{.12, .45, .15});
+    auto green_triangle1 = std::make_shared<Triangle>(
+        Vector3d{555.0, 0.0, 0.0}, Vector3d{555.0, 555.0, 0.0}, Vector3d{555.0, 0.0, 555.0},
+        Vector3d{-1.0, 0.0, 0.0}, Vector3d{-1.0, 0.0, 0.0}, Vector3d{-1.0, 0.0, 0.0}, Vector2d{0.0, 0.0},
+        Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, green);
+    auto green_triangle2 = std::make_shared<Triangle>(
+        Vector3d{555.0, 555.0, 555.0}, Vector3d{555.0, 0.0, 555.0}, Vector3d{555.0, 555.0, 0.0},
+        Vector3d{-1.0, 0.0, 0.0}, Vector3d{-1.0, 0.0, 0.0}, Vector3d{-1.0, 0.0, 0.0}, Vector2d{0.0, 0.0},
+        Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, green);
+    world.add(green_triangle1);
+    world.add(green_triangle2);
+
+    // White
+    auto white = std::make_shared<Lambertian>(Color3d{.73, .73, .73});
+    auto white_triangle1 = std::make_shared<Triangle>(
+        Vector3d{0.0, 0.0, 0.0}, Vector3d{0.0, 0.0, 555.0}, Vector3d{555.0, 0.0, 0.0},
+        Vector3d{0.0, 1.0, 0.0}, Vector3d{0.0, 1.0, 0.0}, Vector3d{0.0, 1.0, 0.0}, Vector2d{0.0, 0.0},
+        Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, white);
+    auto white_triangle2 = std::make_shared<Triangle>(
+        Vector3d{555.0, 0.0, 555.0}, Vector3d{555.0, 0.0, 0.0}, Vector3d{0.0, 0.0, 555.0},
+        Vector3d{0.0, 1.0, 0.0}, Vector3d{0.0, 1.0, 0.0}, Vector3d{0.0, 1.0, 0.0}, Vector2d{0.0, 0.0},
+        Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, white);
+    world.add(white_triangle1);
+    world.add(white_triangle2);
+
+    auto white_triangle3 = std::make_shared<Triangle>(
+        Vector3d{0.0, 555.0, 0.0}, Vector3d{0.0, 555.0, 555.0}, Vector3d{555.0, 555.0, 0.0},
+        Vector3d{0.0, -1.0, 0.0}, Vector3d{0.0, -1.0, 0.0}, Vector3d{0.0, -1.0, 0.0}, Vector2d{0.0, 0.0},
+        Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, white);
+    auto white_triangle4 = std::make_shared<Triangle>(
+        Vector3d{555.0, 555.0, 555.0}, Vector3d{555.0, 555.0, 0.0}, Vector3d{0.0, 555.0, 555.0},
+        Vector3d{0.0, -1.0, 0.0}, Vector3d{0.0, -1.0, 0.0}, Vector3d{0.0, -1.0, 0.0}, Vector2d{0.0, 0.0},
+        Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, white);
+    world.add(white_triangle3);
+    world.add(white_triangle4);
+
+    auto white_triangle5 = std::make_shared<Triangle>(
+        Vector3d{0.0, 0.0, 555.0}, Vector3d{0.0, 555.0, 555.0}, Vector3d{555.0, 0.0, 555.0},
+        Vector3d{0.0, 0.0, -1.0}, Vector3d{0.0, 0.0, -1.0}, Vector3d{0.0, 0.0, -1.0}, Vector2d{0.0, 0.0},
+        Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, white);
+    auto white_triangle6 = std::make_shared<Triangle>(
+        Vector3d{555.0, 555.0, 555.0}, Vector3d{555.0, 0.0, 555.0}, Vector3d{0.0, 555.0, 555.0},
+        Vector3d{0.0, 0.0, -1.0}, Vector3d{0.0, 0.0, -1.0}, Vector3d{0.0, 0.0, -1.0}, Vector2d{0.0, 0.0},
+        Vector2d{0.0, 0.0}, Vector2d{0.0, 0.0}, white);
+    world.add(white_triangle5);
+    world.add(white_triangle6);
+
+    // Tall Box
+    return world;
+}
+
 std::function<Hittable_list()> get_scene_function(std::string function_name) {
-    static std::unordered_map<std::string, std::function<Hittable_list()>> m = {
-        {"random_scene", random_scene}, {"cornell_box", cornell_box}};
+    static std::unordered_map<std::string, std::function<Hittable_list()>> m = {{"random_scene", random_scene},
+                                                                                {"test_lambertian", test_lambertian},
+                                                                                {"cornell_box", cornell_box}};
+
+    return m[function_name];
+}
+
+std::function<Hittable_list(const std::vector<std::string>&)> get_obj_scene_function(std::string function_name) {
+    static std::unordered_map<std::string, std::function<Hittable_list(const std::vector<std::string>& s)>> m = {
+        {"bunny", bunny}};
 
     return m[function_name];
 }

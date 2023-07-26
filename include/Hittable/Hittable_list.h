@@ -19,7 +19,7 @@ public:
     std::vector<std::shared_ptr<Hittable>>& get_objects() { return _objects; }
 
     virtual bool hit(const Ray& r, double t_min, double t_max, Hit_record& rec) const override;
-    virtual bool bounding_box(double time0, double time1, AABB& bounding_box) const override;
+    virtual bool bounding_box(AABB& bounding_box) const override;
 
 private:
     std::vector<std::shared_ptr<Hittable>> _objects;

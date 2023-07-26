@@ -42,11 +42,12 @@ set(PROJECT_SOURCES
         include/ThreadPool.h
         include/AABB.h
         include/ticktock.h
+        include/PDF.h
+        include/OBN.h
         include/Hittable/Hittable.h
         include/Hittable/Hittable_list.h
         include/Hittable/Sphere.h
         include/Hittable/BVH_Node.h
-        include/Hittable/Rect.h
         include/Hittable/Triangle.h
         include/Material/Material.h
         include/Material/Light.h
@@ -58,6 +59,7 @@ set(PROJECT_SOURCES
         src/BVH_Node.cpp
         src/Render.cpp
         src/Scene.cpp
+        src/RenderPara.cpp
 
 )
 

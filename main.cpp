@@ -8,7 +8,7 @@
 #include "utils.h"
 
 // Render Parameters
-RenderPara render_para("E:\\projects\\json_files\\bunny.json");
+RenderPara render_para("E:\\projects\\json_files\\cornell_box.json");
 
 // Render
 Render r;
@@ -22,7 +22,7 @@ QTime render_begin_time;  // I don't set a mutex for it!
 int main(int argc, char *argv[]) {
     // Screen
     double aspect_ratio = 1.0;
-    int width = 800;
+    int width = 1200;
     int height = static_cast<int>(width / aspect_ratio);
     Screen canvas(width, height);
 
@@ -30,19 +30,8 @@ int main(int argc, char *argv[]) {
     Camera cam(render_para.lookfrom, render_para.lookat, render_para.vup, render_para.vfov, aspect_ratio,
                render_para.aperture, render_para.focus_dist, 0.0, 0.0);
 
-
-    Hittable_list world;
-    // World
-    if(!render_para.scene_function.empty()){
-        world = get_scene_function(render_para.scene_function)();
-    }
-
-    if(!render_para.scene_obj_paths.empty()) {
-        world = obj_scene(render_para.scene_obj_paths);
-    }
-
     // Render
-    r = Render{canvas, cam, world};
+    r = Render{canvas, cam, render_para.world};
 
     QApplication a(argc, argv);
     MainWindow w;

@@ -9,7 +9,13 @@
 class Material {
 public:
     virtual bool scatter(const Ray& ray_in, const Hit_record& rec, Color3d& attenuation, Ray& scattered) const = 0;
+    // This function used for calculating BRDF.
+    virtual Vector3d eval(Vector3d wi_dir, Vector3d wo_dir, const Hit_record& rec) const {
+        return Vector3d{0.0, 0.0, 0.0};
+    }
+    // These two functions only need to be overloaded for illuminated Matreial such as Diffuse_light.
     virtual Color3d emitted(double u, double v, Vector3d point) const { return Color3d{0.0, 0.0, 0.0}; }
+    virtual bool has_emit() const { return false; }
 };
 
 class Lambertian : public Material {
@@ -28,6 +34,17 @@ public:
         scattered = Ray{rec.p, scattered_direction, ray_in.time()};
         attenuation = albedo->value(rec.u, rec.v, rec.p);
         return true;
+    }
+
+    virtual Vector3d eval(Vector3d wi_dir, Vector3d wo_dir, const Hit_record& rec) const override {
+        Vector3d unit_wi_dir = wi_dir.normalized();
+        double cos_theta = unit_wi_dir.dot(rec.normal);
+
+        if (cos_theta > 0.0) {
+            return albedo->value(rec.u, rec.v, rec.p) / pi;
+        } else {
+            return Vector3d{0.0, 0.0, 0.0};
+        }
     }
 
 private:

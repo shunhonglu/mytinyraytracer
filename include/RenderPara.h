@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <json.hpp>
+#include <unordered_map>
 
 #include "mymath.h"
 #include "spdlog/spdlog.h"
@@ -12,6 +13,12 @@
 using json = nlohmann::json;
 
 struct RenderPara {
+    enum Material_Type{
+        m_Lambertian, m_Diffuse_light
+    };
+
+    static std::unordered_map<std::string, Material_Type> m;
+
     RenderPara(const std::string& path) {
         std::ifstream json_file(path);
 
@@ -51,18 +58,30 @@ struct RenderPara {
         spdlog::info("background: [ {} ]", Vec3d_to_str(background));
 
         // Scene
-        if(json_data["scene"].find("scene_function") != json_data["scene"].end()) {
-            scene_function = json_data["scene"]["scene_function"];
-            spdlog::info("scene_function: {}", scene_function);
-        }
+        build_world(json_data["scene"]);
 
-        if(json_data["scene"].find("scene_obj_paths") != json_data["scene"].end()) {
-            scene_obj_paths = json_data["scene"]["scene_obj_paths"];
-            for(const auto& scene_obj_path : scene_obj_paths) {
-                spdlog::info("scene_obj_paths: {}", scene_obj_path);
-            }
-        }
+//        if(json_data["scene"].find("objs") != json_data["scene"].end()) {
+//            auto objs = json_data["scene"]["objs"];
+//            for(const auto& obj:objs) {
+//                std::string path = obj["obj_path"];
+//                auto material = obj["material"];
+//            }
+//        }
+
+//        scene_function = json_data["scene"]["scene_function"];
+
+//        if(json_data["scene"].find("scene_obj_paths") != json_data["scene"].end()) {
+//            scene_obj_paths = json_data["scene"]["scene_obj_paths"];
+//            for(const auto& scene_obj_path : scene_obj_paths) {
+//                spdlog::info("scene_obj_paths: {}", scene_obj_path);
+//            }
+//        }
     }
+
+    std::shared_ptr<Material> build_material(const json& material) const;
+    void build_obj(const std::string& obj_path, std::shared_ptr<Material> mat_ptr);
+    void build_world(const json& scene);
+
     // Camera
     Vector3d lookfrom{0.0, 0.0, 1.0};
     Vector3d lookat{0.0, 0.0, 0.0};
@@ -77,6 +96,7 @@ struct RenderPara {
     Color3d background{0.0, 0.0, 0.0};
 
     // Scene
+    Hittable_list world;
     std::string scene_function;
     std::vector<std::string> scene_obj_paths;
 };
