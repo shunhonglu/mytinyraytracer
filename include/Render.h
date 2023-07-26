@@ -25,6 +25,7 @@ public:
     void render(int samples_per_pixel, int depth, Color3d background);
 
 private:
+    double RussianRoulette{0.8};
     Screen _canvas;
     Camera _cam;
     Hittable_list _world;

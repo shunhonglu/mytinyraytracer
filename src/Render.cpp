@@ -84,15 +84,24 @@ Color3d Render::ray_color(const Ray& r, Color3d background, const Hittable& worl
 
     Color3d indirect{0.0, 0.0, 0.0};  // it must be initialized.
 
-    Cosine_PDF cosine_pdf(rec.normal);
-    Ray scattered{rec.p, cosine_pdf.generate(), r.time()};
-    Hit_record is_light;
-    if (world.hit(scattered, 0.001, infinity, is_light) && !is_light.mat_ptr->has_emit()) {
-        double pdf = cosine_pdf.value(scattered.direction());
-        double cos_theta = rec.normal.dot(scattered.direction().normalized());
-        indirect = ray_color(scattered, background, world, depth - 1)
-                       .cwiseProduct(rec.mat_ptr->eval(scattered.direction(), r.direction(), rec)) *
-                   cos_theta / pdf;
+    if (random_double() < RussianRoulette) {
+        double scale = 1 / RussianRoulette;
+        Cosine_PDF cosine_pdf(rec.normal);
+        Ray scattered{rec.p, cosine_pdf.generate(), r.time()};
+        Hit_record is_light;
+        // if indirect light hits nothing, set indirect light as background.
+        if (!world.hit(scattered, 0.001, infinity, is_light)) {
+            indirect = background;
+            // if indirect light hits object emitting, set it as zero.
+        } else if (world.hit(scattered, 0.001, infinity, is_light) && is_light.mat_ptr->has_emit()) {
+            indirect = {0.0, 0.0, 0.0};
+        } else {
+            double pdf = cosine_pdf.value(scattered.direction());
+            double cos_theta = rec.normal.dot(scattered.direction().normalized());
+            indirect = ray_color(scattered, background, world, depth)
+                           .cwiseProduct(rec.mat_ptr->eval(scattered.direction(), r.direction(), rec)) *
+                       cos_theta / pdf * scale;
+        }
     }
 
     return direct + indirect;
@@ -107,7 +116,7 @@ void Render::render(int samples_per_pixel, int depth, Color3d background) {
         remaining_lines = j;
         for (int i = 0; i < width; ++i) {
             // used for debug.
-            //            std::cout << j << '\t' << i << std::endl;
+            // std::cout << i << '\t' << j << '\n';
             Color3d color_per_pixel{0.0, 0.0, 0.0};
             for (int s = 0; s < samples_per_pixel; ++s) {
                 auto u = (static_cast<double>(i) + random_double()) / (width - 1);

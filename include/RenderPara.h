@@ -1,50 +1,30 @@
 #ifndef RENDERPARA_H
 #define RENDERPARA_H
 
+#include <spdlog/spdlog.h>
+
 #include <fstream>
 #include <iostream>
 #include <json.hpp>
 #include <unordered_map>
 
+#include "Texture.h"
 #include "mymath.h"
-#include "spdlog/spdlog.h"
 #include "utils.h"
 
 using json = nlohmann::json;
 
 struct RenderPara {
-    enum Material_Type{
-        m_Lambertian, m_Diffuse_light
-    };
+    enum Texture_Type { t_Solid_Texture, t_Image_Texture };
+    enum Material_Type { m_Lambertian, m_Diffuse_light, m_Micorofacet };
 
+    static std::unordered_map<std::string, Texture_Type> t;
     static std::unordered_map<std::string, Material_Type> m;
 
     RenderPara(const std::string& path) {
         std::ifstream json_file(path);
 
         json json_data = json::parse(json_file);
-
-        // Camera
-        std::vector<double> _lookfrom = json_data["camera"]["lookfrom"];
-        lookfrom << _lookfrom[0], _lookfrom[1], _lookfrom[2];
-        spdlog::info("lookfrom: [ {} ]", Vec3d_to_str(lookfrom));
-
-        std::vector<double> _lookat = json_data["camera"]["lookat"];
-        lookat << _lookat[0], _lookat[1], _lookat[2];
-        spdlog::info("lookat: [ {} ]", Vec3d_to_str(lookat));
-
-        std::vector<double> _vup = json_data["camera"]["vup"];
-        vup << _vup[0], _vup[1], _vup[2];
-        spdlog::info("vup: [ {} ]", Vec3d_to_str(vup));
-
-        vfov = json_data["camera"]["vfov"];
-        spdlog::info("vfov: {}", vfov);
-
-        aperture = json_data["camera"]["aperture"];
-        spdlog::info("aperture: {}", aperture);
-
-        focus_dist = json_data["camera"]["focus_dist"];
-        spdlog::info("focus_dist: {}", focus_dist);
 
         // Render Parameters
         samples_per_pixel = json_data["render_parameters"]["samples_per_pixel"];
@@ -57,30 +37,33 @@ struct RenderPara {
         background << _background[0], _background[1], _background[2];
         spdlog::info("background: [ {} ]", Vec3d_to_str(background));
 
+        // Screen
+        build_screen(json_data["screen"]);
+
+        // Camera
+        build_camera(json_data["camera"]);
+
         // Scene
         build_world(json_data["scene"]);
-
-//        if(json_data["scene"].find("objs") != json_data["scene"].end()) {
-//            auto objs = json_data["scene"]["objs"];
-//            for(const auto& obj:objs) {
-//                std::string path = obj["obj_path"];
-//                auto material = obj["material"];
-//            }
-//        }
-
-//        scene_function = json_data["scene"]["scene_function"];
-
-//        if(json_data["scene"].find("scene_obj_paths") != json_data["scene"].end()) {
-//            scene_obj_paths = json_data["scene"]["scene_obj_paths"];
-//            for(const auto& scene_obj_path : scene_obj_paths) {
-//                spdlog::info("scene_obj_paths: {}", scene_obj_path);
-//            }
-//        }
     }
 
+    std::shared_ptr<Texture> build_texture(const json& texture) const;
     std::shared_ptr<Material> build_material(const json& material) const;
     void build_obj(const std::string& obj_path, std::shared_ptr<Material> mat_ptr);
+    void build_screen(const json& screen);
+    void build_camera(const json& camera);
     void build_world(const json& scene);
+
+    // Render Parameters
+    int samples_per_pixel{1};
+    int raytraer_depth{4};
+    Color3d background{0.0, 0.0, 0.0};
+
+    // Screen
+    int width{0};
+    int height{0};
+    double aspect_ratio{0.0};
+    Screen canvas;
 
     // Camera
     Vector3d lookfrom{0.0, 0.0, 1.0};
@@ -89,16 +72,10 @@ struct RenderPara {
     double vfov{0.0};
     double aperture{0.0};
     double focus_dist{1.0};
-
-    // Render Parameters
-    int samples_per_pixel{1};
-    int raytraer_depth{4};
-    Color3d background{0.0, 0.0, 0.0};
+    Camera cam;
 
     // Scene
     Hittable_list world;
-    std::string scene_function;
-    std::vector<std::string> scene_obj_paths;
 };
 
 #endif  // RENDERPARA_H

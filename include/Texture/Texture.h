@@ -1,6 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include <spdlog/spdlog.h>
 #include <stb_image.h>
 
 #include <iostream>
@@ -71,15 +72,14 @@ public:
         _data = stbi_load(filename, &width, &height, &channels_in_file, desired_channels);
 
         if (!_data) {
-            std::cerr << "Can't load image texture " << filename << '\n';
+            spdlog::error("Can't load image texture {}!", filename);
         }
     }
 
     ~Image_Texture() { delete _data; }
 
-
     virtual Color3d value(double u, double v, Vector3d point) const override {
-        if(!_data) {
+        if (!_data) {
             return {0.0, 1.0, 1.0};
         }
 
@@ -94,14 +94,15 @@ public:
         int i = static_cast<int>(u * width);
         int j = static_cast<int>(v * height);
 
-        if (i >= width)  i = width-1;
-        if (j >= height) j = height-1;
+        if (i >= width) i = width - 1;
+        if (j >= height) j = height - 1;
 
         auto scale = 1.0 / 255.0;
         auto pixel = _data + (j * width + i) * desired_channels;
 
         return {scale * pixel[0], scale * pixel[1], scale * pixel[2]};
     }
+
 private:
     unsigned char* _data;
     int width, height;

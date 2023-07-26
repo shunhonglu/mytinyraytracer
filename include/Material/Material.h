@@ -9,7 +9,11 @@
 class Material {
 public:
     virtual bool scatter(const Ray& ray_in, const Hit_record& rec, Color3d& attenuation, Ray& scattered) const = 0;
-    // This function used for calculating BRDF.
+    /*
+     * This function used for calculating BRDF.
+     * wi_dir always point out, wo_dir always point in.
+     * and they may not unit vector. You should normalize it by yourself.
+     */
     virtual Vector3d eval(Vector3d wi_dir, Vector3d wo_dir, const Hit_record& rec) const {
         return Vector3d{0.0, 0.0, 0.0};
     }

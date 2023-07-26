@@ -51,6 +51,7 @@ set(PROJECT_SOURCES
         include/Hittable/Triangle.h
         include/Material/Material.h
         include/Material/Light.h
+        include/Material/Micorofacet.h
         include/Texture/Texture.h
         include/Texture/Perlin.h
         src/Sphere.cpp
@@ -60,6 +61,7 @@ set(PROJECT_SOURCES
         src/Render.cpp
         src/Scene.cpp
         src/RenderPara.cpp
+        src/Micorofacet.cpp
 
 )
 
