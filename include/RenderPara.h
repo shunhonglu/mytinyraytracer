@@ -16,7 +16,7 @@ using json = nlohmann::json;
 
 struct RenderPara {
     enum Texture_Type { t_Solid_Texture, t_Image_Texture };
-    enum Material_Type { m_Lambertian, m_Diffuse_light, m_Micorofacet };
+    enum Material_Type { m_Metal, m_Lambertian, m_Diffuse_light, m_Micorofacet };
 
     static std::unordered_map<std::string, Texture_Type> t;
     static std::unordered_map<std::string, Material_Type> m;

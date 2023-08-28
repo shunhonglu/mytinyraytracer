@@ -8,7 +8,7 @@
 #include "utils.h"
 
 // Render Parameters
-RenderPara render_para("E:\\projects\\scenes\\micorofacet_scene\\micorofacet.json");
+RenderPara render_para("E:\\projects\\scenes\\bunny_scene\\bunny.json");
 
 // Render
 Render r;

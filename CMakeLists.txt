@@ -18,14 +18,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 # add *TBB*
 find_package(TBB REQUIRED)
 
-# add *rt_stb_image* as a library
-add_subdirectory(rt_stb_image)
-
-# add *spdlog* as a library
-add_subdirectory(spdlog)
-
-# add *tiny_obj_loader* as a library
-add_subdirectory(rt_tiny_obj_loader)
+# add *extern libraries*
+add_subdirectory(ext)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -59,7 +53,6 @@ set(PROJECT_SOURCES
         src/Hittable_list.cpp
         src/BVH_Node.cpp
         src/Render.cpp
-        src/Scene.cpp
         src/RenderPara.cpp
         src/Micorofacet.cpp
 
@@ -98,20 +91,20 @@ target_link_libraries(mytinyraytracer PUBLIC TBB::tbb)
 
 # link *rt_stb_image_lib*
 target_link_libraries(mytinyraytracer PUBLIC rt_stb_image_lib)
-target_include_directories(mytinyraytracer PUBLIC rt_stb_image)
+target_include_directories(mytinyraytracer PUBLIC ext/rt_stb_image)
 
 # link *spdlog*
 target_link_libraries(mytinyraytracer PUBLIC spdlog::spdlog)
 
 #link *rt_tiny_obj_loader_lib*
 target_link_libraries(mytinyraytracer PUBLIC rt_tiny_obj_loader_lib)
-target_include_directories(mytinyraytracer PUBLIC rt_tiny_obj_loader)
+target_include_directories(mytinyraytracer PUBLIC ext/rt_tiny_obj_loader)
 
 # link *Eigen*
-target_include_directories(mytinyraytracer PUBLIC Eigen)
+target_include_directories(mytinyraytracer PUBLIC ext/Eigen)
 
 # link *nlohmann*
-target_include_directories(mytinyraytracer PUBLIC nlohmann)
+target_include_directories(mytinyraytracer PUBLIC ext/nlohmann)
 
 target_link_libraries(mytinyraytracer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 

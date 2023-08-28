@@ -40,6 +40,11 @@ Color3d Render::ray_color(const Ray& r, Color3d background, const Hittable& worl
     }
 
     /*
+     * TODO: Use Ray Tracing instead of Path Tracing!
+     */
+
+
+    /*
      * DIRECT LIGHT
      */
 

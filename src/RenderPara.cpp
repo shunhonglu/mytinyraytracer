@@ -76,14 +76,23 @@ std::shared_ptr<Texture> RenderPara::build_texture(const json& texture) const {
     return tex_ptr;
 }
 
-std::unordered_map<std::string, RenderPara::Material_Type> RenderPara::m = {
-    {"Lambertian", m_Lambertian}, {"Diffuse_light", m_Diffuse_light}, {"Micorofacet", m_Micorofacet}};
+std::unordered_map<std::string, RenderPara::Material_Type> RenderPara::m = {{"Metal", m_Metal},
+                                                                            {"Lambertian", m_Lambertian},
+                                                                            {"Diffuse_light", m_Diffuse_light},
+                                                                            {"Micorofacet", m_Micorofacet}};
 
 std::shared_ptr<Material> RenderPara::build_material(const json& material) const {
     auto type = material["material_type"];
 
     std::shared_ptr<Material> mat_ptr;
     switch (m[type]) {
+        case m_Metal: {
+            auto texture_type = material["albedo"]["texture_type"];
+            spdlog::info("{} albedo is {}.", type, texture_type);
+            auto albedo_tex_ptr = build_texture(material["albedo"]);
+            double fuzzy = material["fuzzy"];
+            mat_ptr = std::make_shared<Metal>(albedo_tex_ptr, fuzzy);
+        } break;
         case m_Lambertian: {
             auto texture_type = material["albedo"]["texture_type"];
             spdlog::info("{} albedo is {}.", type, texture_type);
@@ -240,7 +249,8 @@ void RenderPara::build_world(const json& scene) {
             origin << origin_vector[0], origin_vector[1], origin_vector[2];
             double radius = sphere["radius"];
 
-            spdlog::info(">>>>>>>>>>>> Sphere origin = [ {} ], radius = {} begin building.", Vec3d_to_str(origin), radius);
+            spdlog::info(">>>>>>>>>>>> Sphere origin = [ {} ], radius = {} begin building.", Vec3d_to_str(origin),
+                         radius);
             auto material = sphere["material"];
             auto material_type = sphere["material"]["material_type"];
             spdlog::info("Sphere origin = [ {} ], radius = {}, material type is {}", Vec3d_to_str(origin), radius,
@@ -248,7 +258,8 @@ void RenderPara::build_world(const json& scene) {
 
             auto mat_ptr = build_material(material);
             world.add(std::make_shared<Sphere>(origin, radius, mat_ptr));
-            spdlog::info(">>>>>>>>>>>> Sphere origin = [ {} ], radius = {} has successfully built!\n", Vec3d_to_str(origin), radius);
+            spdlog::info(">>>>>>>>>>>> Sphere origin = [ {} ], radius = {} has successfully built!\n",
+                         Vec3d_to_str(origin), radius);
         }
     }
 }
