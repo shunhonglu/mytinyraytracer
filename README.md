@@ -4,7 +4,9 @@
 
 ## 特性
 
-渲染文件表现为一个 json 文件，测试场景位于 scenes 文件夹中。json 解析库使用的是 [GitHub - nlohmann/json: JSON for Modern C++](https://github.com/nlohmann/json)。 
+使用 Qt 实时展示渲染流程，渲染文件表现为一个 json 文件，测试场景位于 scenes 文件夹中。json 解析库使用的是 [GitHub - nlohmann/json: JSON for Modern C++](https://github.com/nlohmann/json)。 
+
+https://github.com/shunhonglu/mytinyraytracer/assets/82373561/56212504-12ae-41ea-ae55-ad7c939c804c
 
 渲染文件格式示例如下：
 ```json

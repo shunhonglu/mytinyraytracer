@@ -8,7 +8,7 @@
 #include "utils.h"
 
 // Render Parameters
-RenderPara render_para("E:\\projects\\scenes\\bunny_scene\\bunny.json");
+RenderPara render_para("E:\\projects\\mytinyraytracer\\scenes\\cornell_box_scene\\cornell_box.json");
 
 // Render
 Render r;

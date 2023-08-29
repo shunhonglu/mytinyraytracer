@@ -24,7 +24,7 @@
         "focus_dist": 1.0
     },
     "render_parameters": {
-        "samples_per_pixel": 8,
+        "samples_per_pixel": 64,
         "raytraer_depth": 3,
         "background": [
             0.0,
