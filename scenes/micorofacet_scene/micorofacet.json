@@ -1,0 +1,166 @@
+{
+    "screen": {
+        "width": 800,
+        "aspect_ratio": 1.0
+    },
+    "camera": {
+        "lookfrom": [
+            278.0,
+            278.0,
+            -800.0
+        ],
+        "lookat": [
+            278.0,
+            278.0,
+            0.0
+        ],
+        "vup": [
+            0.0,
+            1.0,
+            0.0
+        ],
+        "vfov": 20.0,
+        "aperture": 0.0,
+        "focus_dist": 1.0
+    },
+    "render_parameters": {
+        "samples_per_pixel": 8,
+        "raytraer_depth": 3,
+        "background": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "scene": {
+        "objs": [
+            {
+                "obj_path": "E:\\projects\\scenes\\micorofacet_scene\\micorofacet\\floor.obj",
+                "material": {
+                    "material_type": "Lambertian",
+                    "albedo": {
+                        "texture_type": "Solid_Texture",
+                        "color": [
+                            0.73,
+                            0.73,
+                            0.73
+                        ]
+                    }
+                }
+            },
+            {
+                "obj_path": "E:\\projects\\scenes\\micorofacet_scene\\micorofacet\\left.obj",
+                "material": {
+                    "material_type": "Lambertian",
+                    "albedo": {
+                        "texture_type": "Solid_Texture",
+                        "color": [
+                            0.12,
+                            0.45,
+                            0.15
+                        ]
+                    }
+                }
+            },
+            {
+                "obj_path": "E:\\projects\\scenes\\micorofacet_scene\\micorofacet\\right.obj",
+                "material": {
+                    "material_type": "Lambertian",
+                    "albedo": {
+                        "texture_type": "Solid_Texture",
+                        "color": [
+                            0.12,
+                            0.45,
+                            0.15
+                        ]
+                    }
+                }
+            },
+            {
+                "obj_path": "E:\\projects\\scenes\\micorofacet_scene\\micorofacet\\light.obj",
+                "material": {
+                    "material_type": "Diffuse_light",
+                    "emit": {
+                        "texture_type": "Solid_Texture",
+                        "color": [
+                            35,
+                            35,
+                            35
+                        ]
+                    }
+                }
+            },
+            {
+                "obj_path": "E:\\projects\\scenes\\micorofacet_scene\\micorofacet\\light_bottom.obj",
+                "material": {
+                    "material_type": "Diffuse_light",
+                    "emit": {
+                        "texture_type": "Solid_Texture",
+                        "color": [
+                            35,
+                            35,
+                            35
+                        ]
+                    }
+                }
+            }
+        ],
+        "spheres": [
+            {
+                "origin": [
+                    148.0,
+                    300.0,
+                    300.0
+                ],
+                "radius": 120.0,
+                "material": {
+                    "material_type": "Micorofacet",
+                    "index_of_refraction": 1.5,
+                    "kd": {
+                        "texture_type": "Solid_Texture",
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "ks": {
+                        "texture_type": "Solid_Texture",
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    },
+                    "albedo": {
+                        "texture_type": "Image_Texture",
+                        "image_path": "E:\\projects\\scenes\\micorofacet_scene\\textures\\earthmap.jpg"
+                    },
+                    "roughness": {
+                        "texture_type": "Solid_Texture",
+                        "color": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                }
+            },
+            {
+                "origin": [
+                    408,
+                    300,
+                    300
+                ],
+                "radius": 120,
+                "material": {
+                    "material_type": "Lambertian",
+                    "albedo": {
+                        "texture_type": "Image_Texture",
+                        "image_path": "E:\\projects\\scenes\\micorofacet_scene\\textures\\earthmap.jpg"
+                    }
+                }
+            }
+        ]
+    }
+}
